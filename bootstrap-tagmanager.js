@@ -47,7 +47,9 @@
       tagClass: '',
       validator: null,
       onlyTagList: false,
-      afterUpdate: null
+      afterUpdate: null,
+      afterAdd: null,
+      afterRemove: null
     };
 
     var TypeaheadOverrides = (function () {
@@ -243,7 +245,11 @@
 
       // console.log("TagIdToRemove: " + tagId);
       // console.log("position: " + p);
-
+      
+      if (jQuery.isFunction(tagManagerOptions.afterRemove)) {
+        tagManagerOptions.afterRemove(tlis[0]);
+      }
+      
       if (-1 != p) {
         jQuery("#" + objName + "_" + tagId).remove();
         tlis.splice(p, 1);
@@ -343,8 +349,11 @@
         if (tagManagerOptions.maxTags > 0 && tlis.length >= tagManagerOptions.maxTags) {
           obj.hide();
         }
-      }
         
+        if (jQuery.isFunction(tagManagerOptions.afterAdd)) {
+          tagManagerOptions.afterAdd(tag);
+        }
+      }
       obj.val("");
     };
 
